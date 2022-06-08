@@ -5,24 +5,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/lightGray">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/gray"
+            android:gravity="center"
+            android:text="블루투스 연결"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_weight="1"/>
 
         <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_ble_on_off"/>
+            android:id="@+id/btn_ble_on_off"
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/btn_scan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible"
-            android:text="@string/scan_button"/>
+            android:text="@string/scan_button"
+            android:layout_weight="1"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
