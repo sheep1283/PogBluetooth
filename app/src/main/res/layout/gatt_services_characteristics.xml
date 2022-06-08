@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/lightGray">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/gray"
+        android:gravity="center"
+        android:text="충격량 실험"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <LinearLayout android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -11,13 +28,15 @@
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="address"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
         <Space android:layout_width="5dp"
             android:layout_height="wrap_content"/>
         <TextView android:id="@+id/device_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
     </LinearLayout>
     <LinearLayout android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -26,14 +45,16 @@
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="state"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
         <Space android:layout_width="5dp"
             android:layout_height="wrap_content"/>
         <TextView android:id="@+id/connection_state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="disconnected"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
     </LinearLayout>
     <LinearLayout android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -42,29 +63,102 @@
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="hex"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
         <Space android:layout_width="5dp"
             android:layout_height="wrap_content"/>
         <TextView android:id="@+id/data_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="no_data"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/input_info"
+            android:textColor="@color/black"
+            android:layout_marginLeft="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="2"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="제목"
+                android:layout_weight="1"
+                android:textColor="@color/black"/>
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:hint="충격량 실험1"
+                android:backgroundTint="@color/gray"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="2"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="비고"
+                android:layout_weight="1"
+                android:textColor="@color/black"/>
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:hint="자세한 내용을 입력하세요."
+                android:textColor="@color/black"
+                android:backgroundTint="@color/gray"/>
+        </LinearLayout>
+    </LinearLayout>
+
     <Button
         android:id="@+id/btn_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="notify"/>
+        android:text="실험 시작"
+        android:background="@drawable/border_round_btn"
+        android:textColor="@color/white"
+        android:layout_margin="10dp"
+        />
+
     <Button
         android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SAVE"/>
+        android:text="SAVE"
+        android:background="@drawable/border_round_btn"
+        android:textColor="@color/white"
+        android:layout_margin="10dp"/>
     <Button
         android:id="@+id/btn_show"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show"/>
+        android:text="Show"
+        android:background="@drawable/border_round_btn"
+        android:textColor="@color/white"
+        android:layout_margin="10dp"/>
 
 </LinearLayout>

@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">PogBluetooth</string>
     <string name="scan_button">Scan</string>
+
+    <string name="menu_home">홈</string>
+    <string name="menu_search">찾기</string>
+    <string name="menu_matching">매칭</string>
+    <string name="menu_mypage">마이페이지</string>
+    <string name="btn_onoff">블루투스 설정</string>
+    <string name="amount_of_impact">충격량</string>
+    <string name="GA">중력가속도</string>
+    <string name="x">x</string>
+    <string name="y">y</string>
+    <string name="z">z</string>
+    <string name="angle">앞 뒤 각도</string>
+    <string name="direction">좌우 전도 방향</string>
+    <string name="input_info">실험 정보 입력</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
