@@ -59,7 +59,6 @@ class DeviceControlActivity(): Activity() {
         mProgressDialog.show()
         accidentDb = AccidentDB.getInstance(this)
         val gattServiceIntent = Intent(this, BluetoothLeService::class.java)
-        var exList = listOf<Accident>()
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE)
         experimentList = arrayListOf()
         btnNotify.setOnClickListener {
@@ -69,18 +68,32 @@ class DeviceControlActivity(): Activity() {
         }
         btnSave.setOnClickListener {
             val r = Runnable {
-                for (i in experimentList){
-                    val accident = Accident(null, i.date, i.impulseX, i.impulseY, i.impulseZ, i.accelerationOfGravityX, i.accelerationOfGravityY, i.accelerationOfGravityZ, i.frontBack, i.leftRight)
-                    accidentDb!!.accidentDao().insert(accident)
+                if (experimentList.size > 0){
+                    var accList = arrayListOf<AccExp>()
+                    for (i in experimentList){
+                        val accident = AccExp(null, i.date, i.impulseX, i.impulseY, i.impulseZ, i.accelerationOfGravityX, i.accelerationOfGravityY, i.accelerationOfGravityZ, i.frontBack, i.leftRight)
+                        accList.add(accident)
+                    }
+                    val long_now = System.currentTimeMillis()
+                    val t_date = Date(long_now)
+                    val t_dateFormat = SimpleDateFormat("yyyy-MM-dd kk:mm:ss E", Locale("ko", "KR"))
+
+                    val str_date = t_dateFormat.format(t_date)
+                    val experiment = Accident(null, str_date, accList)
+                    accidentDb!!.accidentDao().insert(experiment)
+                    experimentList.clear()
                 }
-                exList = accidentDb!!.accidentDao().getAll()
             }
             val thread = Thread(r)
             thread.start()
         }
         btnShow.setOnClickListener {
-            Log.d("getFromRoom", exList[0].impulseX)
-
+            val r = Runnable{
+                val exList = accidentDb!!.accidentDao().getAll()
+                exList[exList.size-1].accident?.get(0)?.let { it1 -> Log.d("getFromRoom", it1.impulseX) }
+            }
+            val thread = Thread(r)
+            thread.start()
         }
 
     }
@@ -140,22 +153,24 @@ class DeviceControlActivity(): Activity() {
                 Log.d("DeviceContralActi", extras.toString())
                 if (extras!!.containsKey(Constants.EXTRA_BYTE_VALUE)) {
                     val hexString = String(extras.getByteArray(Constants.EXTRA_BYTE_VALUE)!!)
-                    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
                     Log.d("BroadCastRead", String(extras.getByteArray(Constants.EXTRA_BYTE_VALUE)!!))
                     displayData(hexString)
                     val chunckedHex = hexString.split(' ').toMutableList()
-                    val experi = Experiment(System.currentTimeMillis().toString()
-                    , chunckedHex[0]
-                    , chunckedHex[1]
-                    , chunckedHex[2]
-                    , chunckedHex[3]
-                    , chunckedHex[4]
-                    , chunckedHex[5]
-                    , chunckedHex[6]
-                    , chunckedHex[7])
-                    experimentList.add(experi)
-                    read = false
-                    mProgressDialog.dismiss()
+                    if(chunckedHex.size == 8){
+                        val experi = Experiment(System.currentTimeMillis().toString()
+                            , chunckedHex[0]
+                            , chunckedHex[1]
+                            , chunckedHex[2]
+                            , chunckedHex[3]
+                            , chunckedHex[4]
+                            , chunckedHex[5]
+                            , chunckedHex[6]
+                            , chunckedHex[7])
+                        experimentList.add(experi)
+                        read = false
+                        mProgressDialog.dismiss()
+                    }
+
                 }
             }
         }
