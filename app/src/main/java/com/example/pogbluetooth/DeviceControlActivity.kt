@@ -4,24 +4,28 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.bluetooth.*
 import android.content.*
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.*
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
-import com.example.pogbluetooth.BluetoothLeService
 import com.example.pogbluetooth.Database.AccidentDB
-import org.w3c.dom.Text
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-import java.io.UnsupportedEncodingException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.exp
+import android.os.Environment
+
+import android.R.attr.name
+import android.R.attr.name
+import android.R.attr.name
+import android.view.View
+import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import java.io.*
+import kotlin.collections.ArrayList
+
 
 class DeviceControlActivity(): Activity() {
     private var device : BluetoothDevice? = null
@@ -33,8 +37,10 @@ class DeviceControlActivity(): Activity() {
     private var mBluetoothLeService: BluetoothLeService? = null
     private lateinit var mDataField: TextView
     private lateinit var btnNotify: Button
+    private lateinit var btnDelete: Button
     private lateinit var btnSave: Button
     private lateinit var btnShow: Button
+    private lateinit var newRecyclerView: RecyclerView
     private var mServiceDiscoveryStatusReceiverRegistered = false
     var connectionState = false
     lateinit var services: List<BluetoothGattService>
@@ -53,6 +59,7 @@ class DeviceControlActivity(): Activity() {
         btnNotify = findViewById(R.id.btn_notification)
         btnSave = findViewById(R.id.btn_save)
         btnShow = findViewById(R.id.btn_show)
+        btnDelete = findViewById(R.id.btn_delete)
         mProgressDialog = ProgressDialog(this)
         mProgressDialog.setCancelable(false)
         mProgressDialog.setMessage("로딩중입니다")
@@ -61,39 +68,51 @@ class DeviceControlActivity(): Activity() {
         val gattServiceIntent = Intent(this, BluetoothLeService::class.java)
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE)
         experimentList = arrayListOf()
+        btnDelete.setOnClickListener {
+            val r = Runnable {
+                accidentDb!!.accExDao().deleteAll()
+                accidentDb!!.accidentDao().deleteAll()
+            }
+            val thread = Thread(r)
+            thread.start()
+        }
+
         btnNotify.setOnClickListener {
             mProgressDialog.show()
             read = true
             mBluetoothLeService!!.readCharacteristic(services!![3].characteristics[0].descriptors[0].characteristic)
         }
         btnSave.setOnClickListener {
+
             val r = Runnable {
                 if (experimentList.size > 0){
-                    var accList = arrayListOf<AccExp>()
+                    var accList = arrayListOf<Accident>()
+                    val exId = accidentDb!!.accExDao().getAllExp().size // 제일 뒷번호로
                     for (i in experimentList){
-                        val accident = AccExp(null, i.date, i.impulseX, i.impulseY, i.impulseZ, i.accelerationOfGravityX, i.accelerationOfGravityY, i.accelerationOfGravityZ, i.frontBack, i.leftRight)
+                        val accident = Accident(null, exId, i.date, i.impulseX, i.impulseY, i.impulseZ, i.accelerationOfGravityX, i.accelerationOfGravityY, i.accelerationOfGravityZ, i.frontBack, i.leftRight)
                         accList.add(accident)
+                        accidentDb!!.accidentDao().insertAcc(accident)
                     }
                     val long_now = System.currentTimeMillis()
                     val t_date = Date(long_now)
                     val t_dateFormat = SimpleDateFormat("yyyy-MM-dd kk:mm:ss E", Locale("ko", "KR"))
 
                     val str_date = t_dateFormat.format(t_date)
-                    val experiment = Accident(null, str_date, accList)
-                    accidentDb!!.accidentDao().insert(experiment)
+                    val experiment = AccEx(null, str_date, exId)
+                    accidentDb!!.accExDao().insertEx(experiment)
                     experimentList.clear()
                 }
             }
             val thread = Thread(r)
             thread.start()
+
+            Toast.makeText(this, "저장완료", Toast.LENGTH_SHORT).show()
+
+
         }
         btnShow.setOnClickListener {
-            val r = Runnable{
-                val exList = accidentDb!!.accidentDao().getAll()
-                exList[exList.size-1].accident?.get(0)?.let { it1 -> Log.d("getFromRoom", it1.impulseX) }
-            }
-            val thread = Thread(r)
-            thread.start()
+            val intent = Intent(this, SavedExActivity::class.java)
+            startActivity(intent)
         }
 
     }
@@ -157,7 +176,12 @@ class DeviceControlActivity(): Activity() {
                     displayData(hexString)
                     val chunckedHex = hexString.split(' ').toMutableList()
                     if(chunckedHex.size == 8){
-                        val experi = Experiment(System.currentTimeMillis().toString()
+                        val long_now = System.currentTimeMillis()
+                        val t_date = Date(long_now)
+                        val t_dateFormat = SimpleDateFormat("yyyy-MM-dd kk:mm:ss E", Locale("ko", "KR"))
+
+                        val str_date = t_dateFormat.format(t_date)
+                        val experi = Experiment(str_date
                             , chunckedHex[0]
                             , chunckedHex[1]
                             , chunckedHex[2]

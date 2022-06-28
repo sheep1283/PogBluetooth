@@ -55,16 +55,24 @@
         android:id="@+id/btn_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="notify"/>
+        android:text="기기값 notify"/>
     <Button
         android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SAVE"/>
+        android:text="실험 SAVE"/>
     <Button
         android:id="@+id/btn_show"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show"/>
+        android:text="실험 리스트 Show"/>
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="실험 모두 지우기"/>
+
+
+
 
 </LinearLayout>

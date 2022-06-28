@@ -8,11 +8,31 @@ import androidx.room.Query
 @Dao
 interface AccidentDao {
     @Query("SELECT * FROM accident")
-    fun getAll(): List<Accident>
+    fun getAllAcc(): List<Accident>
+
+    @Query("SELECT * FROM accident WHERE exId = :exId")
+    fun getExp(exId: Int): List<Accident>
 
     @Insert(onConflict = REPLACE)
-    fun insert(accident: Accident)
+    fun insertAcc(accident: Accident)
 
     @Query("DELETE from accident")
+    fun deleteAll()
+
+
+//    @Query("SELECT MAX(exId) FROM accex") // 다음 실험 번호
+//    fun getNextId(): Int
+
+}
+
+@Dao
+interface AccExDao{
+    @Query("SELECT * FROM accex")
+    fun getAllExp(): List<AccEx>
+
+    @Insert(onConflict = REPLACE)
+    fun insertEx(accEx: AccEx)
+
+    @Query("DELETE from accex")
     fun deleteAll()
 }
